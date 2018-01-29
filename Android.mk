@@ -68,9 +68,10 @@ include $(BUILD_HOST_SHARED_LIBRARY)
 # Device static library
 include $(CLEAR_VARS)
 
-ifeq ($(TARGET_ARCH),arm)
-LOCAL_SDK_VERSION := 8
-endif
+#ifeq ($(TARGET_ARCH),arm)
+#LOCAL_SDK_VERSION := 8
+#endif
+LOCAL_C_INCLUDES += $(TARGET_C_INCLUDES)
 
 LOCAL_SRC_FILES := $(common_SRC_FILES)
 LOCAL_CFLAGS += $(common_CFLAGS)
@@ -85,9 +86,10 @@ include $(BUILD_STATIC_LIBRARY)
 # Device shared library
 include $(CLEAR_VARS)
 
-ifeq ($(TARGET_ARCH),arm)
-LOCAL_SDK_VERSION := 8
-endif
+#ifeq ($(TARGET_ARCH),arm)
+#LOCAL_SDK_VERSION := 8
+#endif
+LOCAL_C_INCLUDES += $(TARGET_C_INCLUDES)
 
 LOCAL_SRC_FILES := $(common_SRC_FILES)
 LOCAL_CFLAGS += $(common_CFLAGS)
@@ -98,5 +100,12 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 LOCAL_MODULE_TAGS := optional
 LOCAL_COPY_HEADERS_TO := $(common_COPY_HEADERS_TO)
 LOCAL_COPY_HEADERS := $(common_COPY_HEADERS)
+
+ifeq ($(TARGET_SIMULATOR),true)
+LOCAL_LDFLAGS += -ldl
+LOCAL_LDLIBS += -ldl
+else
+LOCAL_SHARED_LIBRARIES += libdl
+endif
 
 include $(BUILD_SHARED_LIBRARY)
